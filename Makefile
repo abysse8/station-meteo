@@ -23,6 +23,15 @@ run: $(TARGET)
 	./$(TARGET)
 
 clean:
-	rm -f $(OBJECTS) $(TARGET)
+	rm -f $(OBJECTS) $(TARGET) tests/test-meteo
 
-.PHONY: all run clean
+tests/test-meteo: tests/test_meteo.c meteo.c meteo.h
+	$(CC) -std=c11 -Wall -Wextra -g -I. tests/test_meteo.c meteo.c -o $@ -lm
+
+test-simulation: tests/test-meteo
+	./tests/test-meteo simulation
+
+test-export: tests/test-meteo
+	./tests/test-meteo export
+
+.PHONY: all run clean test-simulation test-export

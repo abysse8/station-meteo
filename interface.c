@@ -32,50 +32,16 @@ static GtkWidget *export_button;
 
 static void update_value_labels(void)
 {
-    char text[128];
-
-    if (day.count == 0) {
-        gtk_label_set_markup(GTK_LABEL(temperature_label), "<span size='xx-large' weight='bold'>-- °C</span>");
-        gtk_label_set_markup(GTK_LABEL(humidity_label), "<span size='xx-large' weight='bold'>-- %</span>");
-        return;
-    }
-
-    const Reading *latest = &day.readings[day.count - 1];
-
-    g_snprintf(text, sizeof text, "<span size='xx-large' weight='bold'>%.1f °C</span>", latest->temperature);
-    gtk_label_set_markup(GTK_LABEL(temperature_label), text);
-
-    g_snprintf(text, sizeof text, "<span size='xx-large' weight='bold'>%.0f %%</span>", latest->humidity);
-    gtk_label_set_markup(GTK_LABEL(humidity_label), text);
+    /* TODO Diouma (D1): display the latest values, including the empty-day case. */
+    gtk_label_set_text(GTK_LABEL(temperature_label), "TODO D1 — temperature");
+    gtk_label_set_text(GTK_LABEL(humidity_label), "TODO D1 — humidity");
 }
 
 /* Shows simulated time and real time side by side so they cannot be confused. */
 static void update_clock_label(void)
 {
-    char simulated[64];
-    char real[16] = "--:--:--";
-    char text[256];
-    time_t now = time(NULL);
-    struct tm *local = localtime(&now);
-
-    if (local != NULL) {
-        strftime(real, sizeof real, "%H:%M:%S", local);
-    }
-
-    if (day.count == 0) {
-        g_snprintf(simulated, sizeof simulated, "--:--");
-    } else if (day.count < READINGS_PER_DAY) {
-        int minute = day.readings[day.count - 1].minute;
-        g_snprintf(simulated, sizeof simulated, "%02d:%02d", minute / 60, minute % 60);
-    } else {
-        g_snprintf(simulated, sizeof simulated, "day complete");
-    }
-
-    g_snprintf(text, sizeof text,
-               "Simulated time: %s (%d/%d readings)    |    Real time: %s\n"
-               "10 simulated minutes = %.1f real seconds",
-               simulated, day.count, READINGS_PER_DAY, real, TIMER_INTERVAL_MS / 1000.0);
-    gtk_label_set_text(GTK_LABEL(clock_label), text);
+    /* TODO Diouma (D2): simulated time, reading count, real time and speed. */
+    gtk_label_set_text(GTK_LABEL(clock_label), "TODO D2 — simulated / real clock");
 }
 
 /* ---------- Graphs (Cairo) ---------- */
@@ -224,19 +190,9 @@ static gboolean on_draw_graph(GtkWidget *widget, cairo_t *cr, gpointer data)
 /* Called every TIMER_INTERVAL_MS: adds one reading until the day is complete. */
 static gboolean on_timer(gpointer data)
 {
+    /* TODO Julien (J1): connect simulation, labels, redraws and export state.
+     * Keep updating the real clock after all readings have been generated. */
     (void)data;
-
-    if (weather_day_add_reading(&day)) {
-        update_value_labels();
-        gtk_widget_queue_draw(temperature_graph); /* asks GTK to call on_draw_graph again */
-        gtk_widget_queue_draw(humidity_graph);
-
-        if (day.count == READINGS_PER_DAY) {
-            gtk_widget_set_sensitive(export_button, TRUE);
-        }
-    }
-
-    update_clock_label(); /* the real clock keeps ticking after the day is complete */
     return G_SOURCE_CONTINUE;
 }
 

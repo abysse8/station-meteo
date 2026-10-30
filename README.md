@@ -1,5 +1,12 @@
 # Weather Station — MVP
 
+> **Group exercise branch (`group-work`).** Selected implementations have been
+> replaced with TODO stubs. The window builds, but readings and updates are not
+> implemented yet. See [the assignments and acceptance criteria](docs/repartition.md).
+> The complete prototype is on [main](https://github.com/abysse8/station-meteo/tree/main).
+> [Download this exercise as a ZIP](https://github.com/abysse8/station-meteo/archive/refs/heads/group-work.zip)
+> without a GitHub account. The behavior described below is the target behavior.
+
 A simulated weather station written in C with GTK 3 and Cairo.
 It generates one day of temperature and humidity readings (one every 10 simulated minutes, 144 in total), shows the latest values, plots both over 24 hours and exports the full day to a text file.
 
@@ -20,6 +27,26 @@ station-meteo/
 xcode-select --install          # Clang and make, if not already installed
 brew install gtk+3 pkg-config   # GTK 3 (Cairo comes with it) and pkg-config
 ```
+
+On Ubuntu/Debian:
+
+```sh
+sudo apt install clang make pkg-config libgtk-3-dev
+```
+
+On Windows, use a Linux environment with graphical application support (for
+example WSL with WSLg), or an appropriate GTK 3 toolchain. This Makefile expects
+a Unix-like shell, `clang`, `make`, and `pkg-config`.
+
+## Group checks
+
+```sh
+make test-simulation  # Boubacar: expected to fail until B1 is implemented
+make test-export      # Chahid: expected to fail until C1 is implemented
+```
+
+These C checks do not require GTK or a graphical display. Check labels, timer,
+redrawing and dialogs manually using the scenarios in the assignment document.
 
 ## Build and run (VS Code terminal)
 

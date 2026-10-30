@@ -1,0 +1,5 @@
+*.o
+station-meteo
+station-meteo.dSYM/
+weather_data.txt
+.DS_Store
